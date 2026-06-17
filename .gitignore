@@ -1,0 +1,12 @@
+# macOS
+.DS_Store
+
+# Leftover archives / temp files from packaging attempts
+*.zip
+ziBXwOdr
+
+# Internal planning notes — kept in the Obsidian vault (backed up via Dropbox),
+# not published to the live site. Remove these lines if you'd rather track them on GitHub.
+BRIEF.md
+DEPLOY.md
+NOTE-TO-SADIE.md
