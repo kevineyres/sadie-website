@@ -70,7 +70,8 @@ section[id] { scroll-margin-top: 90px; }
   margin-bottom: 1rem;
 }
 .script { font-family: var(--script); color: var(--terracotta); text-transform: none; letter-spacing: 0; }
-.eyebrow .script { font-size: 1.5em; margin-left: .25em; }
+.eyebrow .script { font-size: 1.9em; font-weight: 600; color: #9A5524; margin-left: .3em; }
+.connect-brand .script { font-size: 1.5em; font-weight: 600; color: #9A5524; }
 
 .lead { font-size: 1.2rem; color: var(--taupe); }
 .prose p + p { margin-top: 1.1rem; }
@@ -116,7 +117,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, .dot:focus-visible, 
 .header-inner { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding-block: .85rem; }
 .brand { display: flex; flex-direction: column; line-height: 1; }
 .brand-name { font-family: var(--serif); font-weight: 600; font-size: 1.32rem; letter-spacing: .14em; text-transform: uppercase; color: var(--navy); }
-.brand-tag { font-family: var(--script); font-size: 1.15rem; color: var(--terracotta); margin-top: .1rem; }
+.brand-tag { font-family: var(--script); font-size: 1.45rem; font-weight: 600; color: #9A5524; margin-top: .02rem; line-height: 1; }
 
 .primary-nav { display: flex; align-items: center; gap: clamp(.8rem, 1.6vw, 1.5rem); }
 .primary-nav a { font-size: .92rem; font-weight: 500; color: var(--navy); }
