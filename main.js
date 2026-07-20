@@ -71,20 +71,70 @@
   });
   if (slides.length) { showHero(0); startHero(); }
 
-  /* ---------- Newsletter signup (interim: route to inbox) ----------
-     Until Sadie picks Substack / Kit, every signup opens a pre-filled
-     email to info@sadiegardere.com so no subscriber is lost. */
+  /* ---------- Newsletter signup → MailerLite ----------
+     Submits to MailerLite form Q8wdEv (account 2521236) via its public JSONP
+     endpoint, enrolling subscribers into the "Sadie" group with the form's
+     double opt-in. These are public embed IDs — safe to ship, no secrets. */
+  var ML_SUBSCRIBE = "https://assets.mailerlite.com/jsonp/2521236/forms/193533340735767973/subscribe";
+  var mlPending = null;
+  window.mlWebformSubmitted = function (data) {
+    var cb = mlPending; mlPending = null; if (cb) cb(data);
+  };
+  function mlSubscribe(email) {
+    return new Promise(function (resolve) {
+      var script, timer, done = false;
+      function finish(res) {
+        if (done) return;
+        done = true;
+        clearTimeout(timer);
+        if (script && script.parentNode) script.parentNode.removeChild(script);
+        resolve(res);
+      }
+      mlPending = function (data) { finish({ ok: !!(data && data.success), data: data }); };
+      var guid = (window.crypto && crypto.randomUUID) ? crypto.randomUUID()
+        : String(Date.now()) + "-" + Math.random().toString(16).slice(2);
+      script = document.createElement("script");
+      script.src = ML_SUBSCRIBE + "?callback=mlWebformSubmitted"
+        + "&fields%5Bemail%5D=" + encodeURIComponent(email)
+        + "&ml-submit=1&anticsrf=true&ajax=1&guid=" + guid + "&_=" + Date.now();
+      script.onerror = function () { finish({ ok: false, network: true }); };
+      timer = setTimeout(function () { finish({ ok: false, network: true }); }, 10000);
+      document.body.appendChild(script);
+    });
+  }
+  function subStatus(form) {
+    return form.parentElement ? form.parentElement.querySelector(".subscribe-status") : null;
+  }
+  function showSub(form, kind, msg) {
+    var el = subStatus(form);
+    if (!el) return;
+    el.textContent = msg;
+    el.classList.remove("is-success", "is-error");
+    el.classList.add("is-" + kind);
+    el.hidden = false;
+  }
   document.querySelectorAll("[data-subscribe]").forEach(function (form) {
+    var btn = form.querySelector('button[type="submit"]');
+    var label = btn ? btn.textContent : "Subscribe";
     form.addEventListener("submit", function (e) {
       e.preventDefault();
       var input = form.querySelector('input[type="email"]');
       var email = input ? input.value.trim() : "";
       if (!email) return;
-      var subject = encodeURIComponent("Subscribe me to Letters from Sadie");
-      var body = encodeURIComponent("Please add me to Letters from Sadie:\n" + email);
-      window.location.href = "mailto:info@sadiegardere.com?subject=" + subject + "&body=" + body;
-      form.reset();
-      toast("Thank you — your email app will open. Just hit send to confirm.");
+      var status = subStatus(form);
+      if (status) status.hidden = true;
+      if (btn) { btn.disabled = true; btn.textContent = "Subscribing…"; }
+      mlSubscribe(email).then(function (res) {
+        if (btn) { btn.disabled = false; btn.textContent = label; }
+        if (res.ok) {
+          showSub(form, "success", "Thanks — check your inbox to confirm your subscription.");
+          form.reset();
+        } else if (res.data && res.data.errors && res.data.errors.fields && res.data.errors.fields.email) {
+          showSub(form, "error", res.data.errors.fields.email[0]);
+        } else {
+          showSub(form, "error", "Something went wrong — please try again, or email info@sadiegardere.com.");
+        }
+      });
     });
   });
 

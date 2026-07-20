@@ -219,6 +219,10 @@ a:focus-visible, button:focus-visible, input:focus-visible, .dot:focus-visible, 
 }
 .subscribe input:focus { outline: 2px solid var(--teal); outline-offset: 1px; }
 .connect-letters .subscribe { margin-inline: 0; }
+.subscribe button[disabled] { opacity: .6; cursor: default; }
+.subscribe-status { margin-top: .8rem; font-size: .92rem; font-weight: 600; line-height: 1.4; }
+.subscribe-status.is-success { color: var(--teal-dark); }
+.subscribe-status.is-error { color: #B23A2E; }
 
 /* retailers */
 .retailers { list-style: none; display: flex; flex-wrap: wrap; justify-content: center; gap: .7rem; margin: 1.6rem 0 0; }
