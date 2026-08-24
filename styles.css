@@ -234,6 +234,12 @@ a:focus-visible, button:focus-visible, input:focus-visible, .dot:focus-visible, 
   content: "soon"; font-size: .58rem; text-transform: uppercase; letter-spacing: .1em;
   background: var(--gold); color: var(--navy); padding: .12em .4em; border-radius: 3px; margin-left: .5em; vertical-align: middle;
 }
+/* pending retailers sit back so the buyable links lead */
+.retailer[data-soon] { opacity: .58; }
+a.retailer { color: #fff; text-decoration: none; transition: background-color .18s ease, border-color .18s ease, transform .18s ease; }
+a.retailer:hover { background: rgba(255,255,255,.16); border-color: rgba(255,255,255,.55); transform: translateY(-1px); }
+@media (prefers-reduced-motion: reduce) { a.retailer { transition: none; } a.retailer:hover { transform: none; } }
+
 .bulk { margin-top: 1.6rem; }
 .band-teal .bulk a { color: var(--gold); }
 
